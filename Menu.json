@@ -1,0 +1,34 @@
+{
+  "menu": [
+    {
+      "id": 1,
+      "nombre": "NETFLIX",
+      "enlace": "https://www.netflix.com/do-en/"
+    },
+    {
+      "id": 2,
+      "nombre": "HBO MAX",
+      "enlace": "https://www.max.com/do/es"
+    },
+    {
+      "id": 3,
+      "nombre": "Prime Video",
+      "enlace": "https://www.primevideo.com/"
+    },
+    {
+      "id": 4,
+      "nombre": "Pluto TV",
+      "enlace": "https://pluto.tv/latam/live-tv/"
+    },
+    {
+      "id": 5,
+      "nombre": "Disney+",
+      "enlace": "https://www.disneyplus.com/en-do"
+    },
+    {
+      "id": 6,
+      "nombre": "HULU",
+      "enlace": "https://www.hulu.com/hub/movies"
+    }
+  ]
+}
