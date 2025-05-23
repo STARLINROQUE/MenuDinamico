@@ -1,37 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Dinámico</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Menú Dinámico</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>Menú Dinámico con JSON y PHP</h1>
+  </header>
 
-    <nav id="menu">
-        <ul id="menu-list"></ul>
-    </nav>
+  <nav id="menuContainer"></nav>
 
-    <section class="admin-panel">
-        <h2>Modificando mi Menú</h2>
-        <input type="number" id="menu-id" placeholder="ID (para modificar/eliminar)">
-        <input type="text" id="menu-name" placeholder="Nombre del Menú">
-        <input type="text" id="menu-link" placeholder="Enlace">
-        <textarea id="submenu-items" placeholder="Submenús (formato: Nombre|Enlace por línea)"></textarea>
-        
-        <div class="buttons">
-            <button onclick="addMenuItem()">Agregar</button>
-            <button onclick="updateMenuItem()">Modificar</button>
-            <button onclick="deleteMenuItem()">Eliminar</button>
-            <button onclick="downloadMenuJSON()">Descargar JSON</button>
-        </div>
-    </section>
+  <main>
+    <h2 style="text-align: center;">Agregar nueva opción al menú</h2>
 
-    <script src="script.js"></script>
+    <form id="menuForm">
+      <input type="text" name="nombre" placeholder="Nombre del menú" required>
+      <input type="text" name="enlace" placeholder="Enlace (ej: /servicios)" required>
+      <button type="submit">Agregar</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Proyecto Final</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
