@@ -1,34 +1,29 @@
 {
-  "menu": [
-    {
-      "id": 1,
-      "nombre": "NETFLIX",
-      "enlace": "https://www.netflix.com/do-en/"
-    },
-    {
-      "id": 2,
-      "nombre": "HBO MAX",
-      "enlace": "https://www.max.com/do/es"
-    },
-    {
-      "id": 3,
-      "nombre": "Prime Video",
-      "enlace": "https://www.primevideo.com/"
-    },
-    {
-      "id": 4,
-      "nombre": "Pluto TV",
-      "enlace": "https://pluto.tv/latam/live-tv/"
-    },
-    {
-      "id": 5,
-      "nombre": "Disney+",
-      "enlace": "https://www.disneyplus.com/en-do"
-    },
-    {
-      "id": 6,
-      "nombre": "HULU",
-      "enlace": "https://www.hulu.com/hub/movies"
-    }
-  ]
+    "menu": [
+        {
+            "id": 1,
+            "nombre": "YouTube",
+            "enlace": "https:\/\/www.youtube.com\/"
+        },
+        {
+            "id": 2,
+            "nombre": "Netflix",
+            "enlace": "https:\/\/www.netflix.com\/do-en\/?pubDate=20250414"
+        },
+        {
+            "id": 3,
+            "nombre": "Apple TV",
+            "enlace": "https:\/\/www.apple.com\/apple-tv-plus\/?subid3=dtUevU3487246"
+        },
+        {
+            "id": 4,
+            "nombre": "HULU",
+            "enlace": "https:\/\/www.hulu.com\/start\/affiliate-livetv?cmp=8870&utm_campaign=brand&utm_source=Rakuten&utm_medium=Affiliate&ranMID=42392&ranEAID=9e1vMmumXG0&ranSiteID=9e1vMmumXG0-DT5ZslwiJP7F9QR2tm_2hw&siteID=9e1vMmumXG0-DT5ZslwiJP7F9QR2tm_2hw"
+        },
+        {
+            "id": 5,
+            "nombre": "Paramount",
+            "enlace": "https:\/\/www.paramountplus.com\/do\/?msockid=1096ab1200e662483f0cb8c60176637d"
+        }
+    ]
 }
