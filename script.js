@@ -1,137 +1,103 @@
-let menuData = [];
+document.addEventListener("DOMContentLoaded", function () {
+  const menuContainer = document.getElementById("menuContainer");
+  const menuAdmin = document.getElementById("menuAdmin");
+  const form = document.getElementById("menuForm");
 
-document.addEventListener("DOMContentLoaded", () => {
-    const stored = localStorage.getItem("menu");
-    if (stored) {
-        menuData = JSON.parse(stored);
-        renderMenu();
-    } else {
-        fetch("menu.json")
-            .then(response => response.json())
-            .then(data => {
-                menuData = data.menu;
-                renderMenu();
-            })
-            .catch(error => console.error("Error al cargar el JSON:", error));
-    }
-});
-
-function renderMenu() {
-    const menuList = document.getElementById("menu-list");
-    menuList.innerHTML = "";
-
-    menuData.forEach(item => {
-        const li = document.createElement("li");
-
-        const link = document.createElement("a");
-        link.href = item.enlace;
-        link.innerText = item.nombre;
-        link.target = "_blank";
-
-        li.appendChild(link);
-
-        if (item.submenu && item.submenu.length > 0) {
-            const submenu = document.createElement("div");
-            submenu.classList.add("submenu");
-
-            item.submenu.forEach(sub => {
-                const subLink = document.createElement("a");
-                subLink.href = sub.enlace;
-                subLink.innerText = sub.nombre;
-                subLink.target = "_blank";
-                submenu.appendChild(subLink);
-            });
-
-            li.appendChild(submenu);
-        }
-
-        menuList.appendChild(li);
+  // Cargar menú
+  fetch("menu.json")
+    .then(response => response.json())
+    .then(data => {
+      renderMenu(data.menu);
+      renderAdmin(data.menu);
     });
 
-    localStorage.setItem("menu", JSON.stringify(menuData));
-}
+  // Agregar nueva opción
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    
+    fetch("guardar_menu.php", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.success) {
+        alert("Opción agregada correctamente.");
+        location.reload();
+      } else {
+        alert("Error: " + response.message);
+      }
+    });
+  });
 
-function parseSubmenuInput() {
-    const raw = document.getElementById("submenu-items").value.trim();
-    if (!raw) return [];
+  function renderMenu(menuItems) {
+    const ul = document.createElement("ul");
+    ul.className = "menu";
 
-    return raw.split("\n").map(line => {
-        const [nombre, enlace] = line.split("|").map(s => s.trim());
-        return { nombre, enlace };
-    }).filter(item => item.nombre && item.enlace);
-}
+    menuItems.forEach(item => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = item.enlace;
+      a.textContent = item.nombre;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
 
-function addMenuItem() {
-    const nombre = document.getElementById("menu-name").value.trim();
-    const enlace = document.getElementById("menu-link").value.trim();
-    const submenu = parseSubmenuInput();
+    menuContainer.innerHTML = "";
+    menuContainer.appendChild(ul);
+  }
 
-    if (nombre && enlace) {
-        const newItem = {
-            id: Date.now(),
-            nombre,
-            enlace,
-            submenu
-        };
+  function renderAdmin(menuItems) {
+    menuAdmin.innerHTML = "";
+    menuItems.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "admin-item";
+      div.innerHTML = `
+        <input type="text" value="${item.nombre}" class="nombre" />
+        <input type="text" value="${item.enlace}" class="enlace" />
+        <button class="edit" data-id="${item.id}">Guardar</button>
+        <button class="delete" data-id="${item.id}">Eliminar</button>
+      `;
+      menuAdmin.appendChild(div);
+    });
 
-        menuData.push(newItem);
-        renderMenu();
-        clearInputs();
-    } else {
-        alert("Por favor, completa nombre y enlace.");
-    }
-}
+    // Editar
+    document.querySelectorAll(".edit").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const id = this.dataset.id;
+        const parent = this.parentElement;
+        const nombre = parent.querySelector(".nombre").value;
+        const enlace = parent.querySelector(".enlace").value;
 
-function updateMenuItem() {
-    const id = parseInt(document.getElementById("menu-id").value);
-    const nombre = document.getElementById("menu-name").value.trim();
-    const enlace = document.getElementById("menu-link").value.trim();
-    const submenu = parseSubmenuInput();
+        fetch("editar_menu.php", {
+          method: "POST",
+          body: new URLSearchParams({ id, nombre, enlace })
+        }).then(res => res.json()).then(resp => {
+          if (resp.success) {
+            alert("Opción editada.");
+            location.reload();
+          }
+        });
+      });
+    });
 
-    const index = menuData.findIndex(item => item.id === id);
-    if (index !== -1) {
-        if (nombre) menuData[index].nombre = nombre;
-        if (enlace) menuData[index].enlace = enlace;
-        menuData[index].submenu = submenu;
-        renderMenu();
-        clearInputs();
-    } else {
-        alert("ID no encontrado.");
-    }
-}
-
-function deleteMenuItem() {
-    const id = parseInt(document.getElementById("menu-id").value);
-    const index = menuData.findIndex(item => item.id === id);
-    if (index !== -1) {
-        if (confirm("¿Seguro que deseas eliminar este ítem?")) {
-            menuData.splice(index, 1);
-            renderMenu();
-            clearInputs();
+    // Eliminar
+    document.querySelectorAll(".delete").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const id = this.dataset.id;
+        if (confirm("¿Eliminar esta opción?")) {
+          fetch("eliminar_menu.php", {
+            method: "POST",
+            body: new URLSearchParams({ id })
+          }).then(res => res.json()).then(resp => {
+            if (resp.success) {
+              alert("Eliminado.");
+              location.reload();
+            }
+          });
         }
-    } else {
-        alert("ID no encontrado.");
-    }
-}
-
-function downloadMenuJSON() {
-    const dataStr = JSON.stringify({ menu: menuData }, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "menu_actualizado.json";
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function clearInputs() {
-    document.getElementById("menu-id").value = "";
-    document.getElementById("menu-name").value = "";
-    document.getElementById("menu-link").value = "";
-    document.getElementById("submenu-items").value = "";
-}
+      });
+    });
+  }
+});
